@@ -25,7 +25,7 @@ public class Archive {
     void query(String url2archive) throws IOException {
 
         RequestBody formBody = new FormBody.Builder()
-                .add("url", url2archive)
+                .add("url", urlBuilder(url2archive))
                 .build();
 
         Request request = new Request.Builder()
@@ -60,5 +60,20 @@ public class Archive {
                     IA_S3_ACCESS_KEY=[my access key]
                     IA_S3_SECRET_KEY=[my secret key]
                     """);
+    }
+
+    String urlBuilder(String url) {
+
+        return url +
+                "&" +
+                "capture_all=1" +
+                "&" +
+                "capture_outlinks=1" +
+                "&" +
+                "capture_screenshot=1" +
+                "&" +
+                "delay_wb_availability=1" +
+                "&" +
+                "skip_first_archive=1";
     }
 }
