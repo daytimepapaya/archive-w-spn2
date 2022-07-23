@@ -1,5 +1,6 @@
 package io.github.daytimepapaya;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.cdimascio.dotenv.Dotenv;
 import okhttp3.*;
 
@@ -37,7 +38,11 @@ public class Archive {
         try (Response response = client.newCall(request).execute()) {
             if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
 
-            System.out.println(Objects.requireNonNull(response.body()).string());
+            ObjectMapper mapper = new ObjectMapper();
+            CaptureResponse captureResponse = mapper.readValue(Objects.requireNonNull(response.body()).string(), CaptureResponse.class);
+
+            System.out.printf(String.valueOf(captureResponse));
+//            System.out.println(Objects.requireNonNull(response.body()).string());
         }
 
     }
