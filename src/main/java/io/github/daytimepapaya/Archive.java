@@ -10,15 +10,14 @@ import java.util.Objects;
 public class Archive {
     private final OkHttpClient client = new OkHttpClient();
 
-    private String IA_S3_ACCESS_KEY;
-    private String IA_S3_SECRET_KEY;
+    private Credential credential;
 
     public static void main(String[] args) throws IOException {
         if (args[0] == null)
             throw new RuntimeException("pass the url to archive");
 
         var archive = new Archive();
-        archive.getPassAndKey();
+        archive.getCredential();
         archive.query(args[0]);
     }
 
@@ -31,7 +30,7 @@ public class Archive {
         Request request = new Request.Builder()
                 .url("https://web.archive.org/save")
                 .header("Accept", "application/json")
-                .header("Authorization", "LOW " + IA_S3_ACCESS_KEY + ":" + IA_S3_SECRET_KEY)
+                .header("Authorization", "LOW " + credential.IA_S3_ACCESS_KEY() + ":" + credential.IA_S3_SECRET_KEY())
                 .post(formBody)
                 .build();
 
@@ -47,19 +46,9 @@ public class Archive {
 
     }
 
-    void getPassAndKey() {
+    void getCredential() {
         Dotenv dotenv = Dotenv.load();
-        IA_S3_ACCESS_KEY = dotenv.get("IA_S3_ACCESS_KEY");
-        IA_S3_SECRET_KEY = dotenv.get("IA_S3_SECRET_KEY");
-
-        if (IA_S3_ACCESS_KEY == null || IA_S3_SECRET_KEY == null)
-            throw new RuntimeException("""
-                    Create a .env file in the root of your project.
-                    ex.)
-                    # formatted as key=value
-                    IA_S3_ACCESS_KEY=[my access key]
-                    IA_S3_SECRET_KEY=[my secret key]
-                    """);
+        credential = new Credential(dotenv.get("IA_S3_ACCESS_KEY"), dotenv.get("IA_S3_SECRET_KEY"));
     }
 
     String urlBuilder(String url) {
