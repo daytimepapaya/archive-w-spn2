@@ -8,7 +8,8 @@ import java.io.IOException;
 import java.util.Objects;
 
 public class Archive {
-    private final OkHttpClient client = new OkHttpClient();
+
+    public final OkHttpClient client = new OkHttpClient();
 
     private Credential credential;
 
@@ -24,7 +25,12 @@ public class Archive {
     void query(String url2archive) throws IOException {
 
         RequestBody formBody = new FormBody.Builder()
-                .add("url", urlBuilder(url2archive))
+                .add("url", url2archive)
+                .add("capture_all", "1")
+                .add("capture_outlinks", "1")
+                .add("capture_screenshot", "1")
+                .add("delay_wb_availability", "1")
+                .add("skip_first_archive", "1")
                 .build();
 
         Request request = new Request.Builder()
@@ -41,9 +47,7 @@ public class Archive {
             CaptureResponse captureResponse = mapper.readValue(Objects.requireNonNull(response.body()).string(), CaptureResponse.class);
 
             System.out.printf(String.valueOf(captureResponse));
-//            System.out.println(Objects.requireNonNull(response.body()).string());
         }
-
     }
 
     void getCredential() {
@@ -51,18 +55,4 @@ public class Archive {
         credential = new Credential(dotenv.get("IA_S3_ACCESS_KEY"), dotenv.get("IA_S3_SECRET_KEY"));
     }
 
-    String urlBuilder(String url) {
-
-        return url +
-                "&" +
-                "capture_all=1" +
-                "&" +
-                "capture_outlinks=1" +
-                "&" +
-                "capture_screenshot=1" +
-                "&" +
-                "delay_wb_availability=1" +
-                "&" +
-                "skip_first_archive=1";
-    }
 }
