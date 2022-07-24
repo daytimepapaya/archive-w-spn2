@@ -1,31 +1,25 @@
 package io.github.daytimepapaya;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.github.cdimascio.dotenv.Dotenv;
 import okhttp3.*;
 
 import java.io.IOException;
 import java.util.Objects;
 
-public class Archive {
+public class CaptureRequest {
 
     public final OkHttpClient client = new OkHttpClient();
 
-    private Credential credential;
+    private final Credential credential;
 
-    public static void main(String[] args) throws IOException {
-        if (args[0] == null)
-            throw new RuntimeException("pass the url to archive");
-
-        var archive = new Archive();
-        archive.getCredential();
-        archive.query(args[0]);
+    public CaptureRequest(Credential credential) {
+        this.credential = credential;
     }
 
-    void query(String url2archive) throws IOException {
+    void request(String url) throws IOException {
 
         RequestBody formBody = new FormBody.Builder()
-                .add("url", url2archive)
+                .add("url", url)
                 .add("capture_all", "1")
                 .add("capture_outlinks", "1")
                 .add("capture_screenshot", "1")
@@ -50,9 +44,5 @@ public class Archive {
         }
     }
 
-    void getCredential() {
-        Dotenv dotenv = Dotenv.load();
-        credential = new Credential(dotenv.get("IA_S3_ACCESS_KEY"), dotenv.get("IA_S3_SECRET_KEY"));
-    }
 
 }
