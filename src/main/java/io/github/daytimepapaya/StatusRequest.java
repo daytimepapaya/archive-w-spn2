@@ -1,10 +1,13 @@
 package io.github.daytimepapaya;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import okhttp3.*;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 import java.io.IOException;
 import java.util.Objects;
+import java.util.Optional;
 
 public class StatusRequest {
 
@@ -14,10 +17,9 @@ public class StatusRequest {
 
     public StatusRequest(Credential credential) {
         this.credential = credential;
-
     }
 
-    void request(String job_id) throws IOException {
+    Optional<StatusResponse> request(String job_id) throws IOException {
 
         Request request = new Request.Builder()
                 .url("https://web.archive.org/save/status/" + job_id)
@@ -31,7 +33,7 @@ public class StatusRequest {
             ObjectMapper mapper = new ObjectMapper();
             StatusResponse statusResponse = mapper.readValue(Objects.requireNonNull(response.body()).string(), StatusResponse.class);
 
-            System.out.printf(String.valueOf(statusResponse));
+            return Optional.of(statusResponse);
 
         }
     }

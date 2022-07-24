@@ -5,6 +5,7 @@ import okhttp3.*;
 
 import java.io.IOException;
 import java.util.Objects;
+import java.util.Optional;
 
 public class CaptureRequest {
 
@@ -16,7 +17,7 @@ public class CaptureRequest {
         this.credential = credential;
     }
 
-    void request(String url) throws IOException {
+    Optional<CaptureResponse> request(String url) throws IOException {
 
         RequestBody formBody = new FormBody.Builder()
                 .add("url", url)
@@ -40,7 +41,7 @@ public class CaptureRequest {
             ObjectMapper mapper = new ObjectMapper();
             CaptureResponse captureResponse = mapper.readValue(Objects.requireNonNull(response.body()).string(), CaptureResponse.class);
 
-            System.out.printf(String.valueOf(captureResponse));
+            return Optional.of(captureResponse);
         }
     }
 
