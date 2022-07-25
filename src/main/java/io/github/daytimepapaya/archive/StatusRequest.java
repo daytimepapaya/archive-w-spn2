@@ -19,7 +19,7 @@ public class StatusRequest {
         this.credential = credential;
     }
 
-    Optional<StatusResponse> request(String job_id) throws IOException {
+     public Optional<StatusResponse> request(String job_id) throws IOException {
 
         Request request = new Request.Builder()
                 .url("https://web.archive.org/save/status/" + job_id)

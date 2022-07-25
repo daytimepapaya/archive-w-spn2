@@ -12,6 +12,9 @@ import java.io.IOException;
 import java.util.Optional;
 
 public class Archiver {
+
+    private static final Logger logger = LoggerFactory.getLogger(Archiver.class);
+
     public static void main(String[] args) throws IOException, InterruptedException {
         if (args[0] == null)
             throw new RuntimeException("pass the url to archive");
@@ -22,11 +25,14 @@ public class Archiver {
         var captureRequest = new CaptureRequest(credential);
         Optional<CaptureResponse> captureResponse = captureRequest.request(args[0]);
 
-        Thread.sleep(5000);
+        logger.info("captureResponse: {}", captureResponse);
+
+        Thread.sleep(10000);
 
         if (captureResponse.isPresent() && captureResponse.get().job_id() != null) {
             var statusRequest = new StatusRequest(credential);
-            statusRequest.request(captureResponse.get().job_id());
+            var statusResponse = statusRequest.request(captureResponse.get().job_id());
+            logger.info("statusResponse: {}", statusResponse);
         }
 
     }

@@ -17,7 +17,7 @@ public class CaptureRequest {
         this.credential = credential;
     }
 
-    Optional<CaptureResponse> request(String url) throws IOException {
+     public Optional<CaptureResponse> request(String url) throws IOException {
 
         RequestBody formBody = new FormBody.Builder()
                 .add("url", url)
