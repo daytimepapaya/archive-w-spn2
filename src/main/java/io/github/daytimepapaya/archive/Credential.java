@@ -1,4 +1,4 @@
-package io.github.daytimepapaya;
+package io.github.daytimepapaya.archive;
 
 import org.jetbrains.annotations.NotNull;
 

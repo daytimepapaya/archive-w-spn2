@@ -1,4 +1,4 @@
-package io.github.daytimepapaya;
+package io.github.daytimepapaya.archive;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import okhttp3.OkHttpClient;

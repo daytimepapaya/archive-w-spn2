@@ -1,4 +1,4 @@
-package io.github.daytimepapaya;
+package io.github.daytimepapaya.archive;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 

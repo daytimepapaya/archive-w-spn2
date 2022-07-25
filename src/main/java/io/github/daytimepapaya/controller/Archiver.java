@@ -1,6 +1,12 @@
-package io.github.daytimepapaya;
+package io.github.daytimepapaya.controller;
 
 import io.github.cdimascio.dotenv.Dotenv;
+import io.github.daytimepapaya.archive.CaptureRequest;
+import io.github.daytimepapaya.archive.CaptureResponse;
+import io.github.daytimepapaya.archive.Credential;
+import io.github.daytimepapaya.archive.StatusRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.Optional;
