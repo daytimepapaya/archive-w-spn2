@@ -1,10 +1,9 @@
 package io.github.daytimepapaya.controller;
 
-import io.github.cdimascio.dotenv.Dotenv;
 import io.github.daytimepapaya.archive.CaptureRequest;
 import io.github.daytimepapaya.archive.CaptureResponse;
-import io.github.daytimepapaya.archive.Credential;
 import io.github.daytimepapaya.archive.StatusRequest;
+import io.github.daytimepapaya.util.CredentialUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,7 +19,7 @@ public class Archiver {
             throw new RuntimeException("pass the url to archive");
 
         var archiver = new Archiver();
-        var credential = archiver.getCredential();
+        var credential = CredentialUtils.getCredential();
 
         var captureRequest = new CaptureRequest(credential);
         Optional<CaptureResponse> captureResponse = captureRequest.request(args[0]);
@@ -37,9 +36,10 @@ public class Archiver {
 
     }
 
-    Credential getCredential() {
-        Dotenv dotenv = Dotenv.load();
-        return new Credential(dotenv.get("IA_S3_ACCESS_KEY"), dotenv.get("IA_S3_SECRET_KEY"));
+    private static void usage(){
+        System.out.println("""
+                usage: spn2 <command> [args]...
+                """);
     }
 
 }

@@ -1,6 +1,7 @@
 package io.github.daytimepapaya.archive;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.github.daytimepapaya.util.Credential;
 import okhttp3.*;
 
 import java.io.IOException;
