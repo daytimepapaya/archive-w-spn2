@@ -89,7 +89,7 @@
                     <finalName>jarFileName</finalName>
                     <archive>
                         <manifest>
-                            <mainClass>io.github.daytimepapaya.controller.Archiver</mainClass>
+                            <mainClass>io.github.daytimepapaya.tools.ArchiveTools</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

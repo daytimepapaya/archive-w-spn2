@@ -5,13 +5,12 @@ import java.nio.file.Paths;
 
 public class OSUtils {
 
-    private static final String SQLITE_DATASTORE = "spn2archive.sqlite3";
 
     public static Path getDataDirectory() {
         if (isWindows()) {
-            return Paths.get(System.getenv("LOCALAPPDATA"), SQLITE_DATASTORE);
+            return Paths.get(System.getenv("LOCALAPPDATA"));
         } else {
-            return Paths.get(System.getProperty("user.home"), SQLITE_DATASTORE);
+            return Paths.get(System.getProperty("user.home"));
         }
     }
 
