@@ -13,7 +13,7 @@ public class ArchiveTools {
         String[] rest = Arrays.copyOfRange(args, 1, args.length);
         switch (args[0]) {
             case "rss" -> RssFetcher.main(rest);
-            case "addrss" -> RssAdder.main(rest);
+            case "rssadd" -> RssAdder.main(rest);
             case "spn" -> SavePageNow2.main(rest);
             case "help" -> usage();
             default -> {
