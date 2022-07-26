@@ -4,6 +4,8 @@ import io.github.daytimepapaya.archive.CaptureRequest;
 import io.github.daytimepapaya.archive.CaptureResponse;
 import io.github.daytimepapaya.archive.StatusRequest;
 import io.github.daytimepapaya.util.CredentialUtils;
+import org.jdbi.v3.core.Jdbi;
+import org.jdbi.v3.sqlite3.SQLitePlugin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,8 +20,12 @@ public class Archiver {
         if (args[0] == null)
             throw new RuntimeException("pass the url to archive");
 
-        var archiver = new Archiver();
         var credential = CredentialUtils.getCredential();
+
+
+        Jdbi jdbi = Jdbi.create("jdbc:sqlite:database")
+                .installPlugin(new SQLitePlugin());
+
 
         var captureRequest = new CaptureRequest(credential);
         Optional<CaptureResponse> captureResponse = captureRequest.request(args[0]);
@@ -36,7 +42,7 @@ public class Archiver {
 
     }
 
-    private static void usage(){
+    private static void usage() {
         System.out.println("""
                 usage: spn2 <command> [args]...
                 """);
