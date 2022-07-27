@@ -13,4 +13,8 @@ public class DatabaseUtils {
         return Jdbi.create("jdbc:sqlite:" + Paths.get(OSUtils.getDataDirectory().toString(), SQLITE_DATASTORE))
                 .installPlugin(new SQLitePlugin());
     }
+
+    public static void createArchiveTable(Jdbi jdbi) {
+        jdbi.useHandle(handle -> handle.execute("create table if not exists archive (id integer primary key autoincrement, url text unique)"));
+    }
 }

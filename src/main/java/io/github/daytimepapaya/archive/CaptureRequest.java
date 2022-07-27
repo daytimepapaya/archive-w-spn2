@@ -37,8 +37,6 @@ public class CaptureRequest {
                 .build();
 
         try (Response response = client.newCall(request).execute()) {
-            if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
-
             ObjectMapper mapper = new ObjectMapper();
             CaptureResponse captureResponse = mapper.readValue(Objects.requireNonNull(response.body()).string(), CaptureResponse.class);
 

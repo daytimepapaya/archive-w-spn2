@@ -2,8 +2,8 @@ package io.github.daytimepapaya.tools;
 
 import io.github.daytimepapaya.archive.CaptureRequest;
 import io.github.daytimepapaya.archive.CaptureResponse;
-import io.github.daytimepapaya.archive.StatusRequest;
 import io.github.daytimepapaya.util.CredentialUtils;
+import io.github.daytimepapaya.util.DatabaseUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,24 +14,31 @@ public class SavePageNow2 {
     private static final Logger logger = LoggerFactory.getLogger(ArchiveTools.class);
 
     public static void main(String[] args) {
-        try {
-            var credential = CredentialUtils.getCredential();
 
-            var captureRequest = new CaptureRequest(credential);
-            Optional<CaptureResponse> captureResponse = captureRequest.request(args[0]);
+        var jdbi = DatabaseUtils.getJdbi();
 
-            logger.info("captureResponse: {}", captureResponse);
+        var urls = jdbi.withHandle(handle ->
+                handle.select("select url from archive")
+                        .mapTo(String.class)
+                        .list()
+        );
 
-            Thread.sleep(10000);
+        var credential = CredentialUtils.getCredential();
 
-            if (captureResponse.isPresent() && captureResponse.get().job_id() != null) {
-                var statusRequest = new StatusRequest(credential);
-                var statusResponse = statusRequest.request(captureResponse.get().job_id());
-                logger.info("statusResponse: {}", statusResponse);
+        var captureRequest = new CaptureRequest(credential);
+        urls.forEach(url -> {
+            Optional<CaptureResponse> captureResponse;
+            try {
+                captureResponse = captureRequest.request(url);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
-        } catch (IOException | InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-
+            logger.info("captureResponse: {}", captureResponse);
+            try {
+                Thread.sleep(10000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        });
     }
 }
