@@ -2,6 +2,8 @@ package io.github.daytimepapaya.tools;
 
 import io.github.daytimepapaya.archive.CaptureRequest;
 import io.github.daytimepapaya.archive.CaptureResponse;
+import io.github.daytimepapaya.archive.UserStatus;
+import io.github.daytimepapaya.archive.UserStatusRequest;
 import io.github.daytimepapaya.util.CredentialUtils;
 import io.github.daytimepapaya.util.DatabaseUtils;
 import org.slf4j.Logger;
@@ -26,11 +28,18 @@ public class SavePageNow2 {
         var credential = CredentialUtils.getCredential();
 
         var captureRequest = new CaptureRequest(credential);
+        var userStatusRequest = new UserStatusRequest(credential);
         urls.forEach(url -> {
+            Optional<UserStatus> userStatus;
             Optional<CaptureResponse> captureResponse;
             try {
+                userStatus = userStatusRequest.request();
+                while (userStatus.isEmpty() || userStatus.get().available() == 0) {
+                    Thread.sleep(10000);
+                    userStatus = userStatusRequest.request();
+                }
                 captureResponse = captureRequest.request(url);
-            } catch (IOException e) {
+            } catch (IOException | InterruptedException e) {
                 throw new RuntimeException(e);
             }
             logger.info("captureResponse: {}", captureResponse);
