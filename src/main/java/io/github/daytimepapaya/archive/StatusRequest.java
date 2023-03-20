@@ -9,10 +9,15 @@ import okhttp3.Response;
 import java.io.IOException;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 public class StatusRequest {
 
-    private final OkHttpClient client = new OkHttpClient();
+    public final OkHttpClient client = new OkHttpClient.Builder()
+            .connectTimeout(60, TimeUnit.SECONDS)
+            .writeTimeout(60, TimeUnit.SECONDS)
+            .readTimeout(60, TimeUnit.SECONDS)
+            .build();
 
     private final Credential credential;
 
