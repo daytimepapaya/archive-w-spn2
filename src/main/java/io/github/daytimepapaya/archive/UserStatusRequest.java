@@ -2,6 +2,7 @@ package io.github.daytimepapaya.archive;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.daytimepapaya.util.Credential;
+import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -9,6 +10,7 @@ import okhttp3.Response;
 import java.io.IOException;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class UserStatusRequest {
     private final OkHttpClient client = new OkHttpClient();
@@ -21,8 +23,11 @@ public class UserStatusRequest {
 
     public Optional<UserStatus> request() throws IOException {
 
+        HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse("http://web.archive.org/save/status/user")).newBuilder();
+        urlBuilder.addQueryParameter("_t", String.valueOf(ThreadLocalRandom.current().nextInt(1, 100_000_000))); // To avoid getting a stale cache response
+
         Request request = new Request.Builder()
-                .url("http://web.archive.org/save/status/user")
+                .url(urlBuilder.build())
                 .header("Accept", "application/json")
                 .header("Authorization", "LOW " + credential.IA_S3_ACCESS_KEY() + ":" + credential.IA_S3_SECRET_KEY())
                 .build();
