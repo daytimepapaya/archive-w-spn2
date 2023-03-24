@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.util.Optional;
 
 public class SavePageNow2 {
-    private static final Logger logger = LoggerFactory.getLogger(ArchiveTools.class);
+    private static final Logger logger = LoggerFactory.getLogger(SavePageNow2.class);
 
     public static void main(String[] args) {
 
